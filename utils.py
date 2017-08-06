@@ -38,18 +38,6 @@ def cropped_image_and_steer_bias(data, value):
 
     return img, angle
 
-def translate_image(image, steer):
-    """ Returns translated image and 
-    corrsponding steering angle.
-    """
-    trans_range = 100
-    tr_x = trans_range * np.random.uniform() - trans_range / 2
-    steer_ang = steer + tr_x / trans_range * 2 * .2
-    tr_y = 0
-    M = np.float32([[1, 0, tr_x], [0, 1, tr_y]])
-    image_tr = cv2.warpAffine(image, M, (320,75))
-    return image_tr, steer_ang
-
 
 def flip_image(img, steer):
     """On average, returns the flipped version of the image, that is,
@@ -70,8 +58,6 @@ def process_image(data, value):
     # Preprocess image by cropping it and giving it a steer bias
     img, steer = cropped_image_and_steer_bias(data, value)
     img        = img.reshape(img.shape[0], img.shape[1], 3) 
-    # Randomly translate image and steer
-    #img, steer = translate_image(img, steer)
     # Randomly flip translated image and steer
     img, steer = flip_image(img, steer)
     return img, steer
